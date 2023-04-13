@@ -5,7 +5,11 @@ CREATE TABLE Citta(
     nazione CHAR(20) NOT NULL 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO  Citta () VALUES(1,'forli', 'italia') ,(2,'cesena','italia'), (3,'rimini', 'italia');
+INSERT INTO  Citta () VALUES(1,'forli', 'italia') ,(2,'cesena','italia'), (3,'rimini', 'italia'),('Bologna', 'Italia'),
+('Milano', 'Italia'),
+('Roma', 'Italia'),
+('Napoli', 'Italia'),
+('Torino', 'Italia');;
 
 CREATE TABLE Istituti(
     citta INT NOT NULL,
@@ -17,7 +21,14 @@ CREATE TABLE Istituti(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 INSERT INTO Istituti (  ) VALUES(1,'A righi', 'fratelli argiulli',22),
  (1,'A. saffi', 'gemelli angeli',45),(2,'Monti', 'gurgietta deconcini',90),(3,'Blaise Pascal', 'giacomo Gialdini',56),
-(3,'G. Verdi', 'garibaldi',44);
+(3,'G. Verdi', 'garibaldi',44),
+(4,'Liceo Galvani', 'Via Calzoni', 6),
+(4,'Liceo Righi', 'Via Irnerio', 34),
+(5,'Liceo Parini', 'Via Goito', 9),
+(6,'Liceo Tasso', 'Via Sicilia', 168),
+(7,'Liceo Vittorini', 'Via Mezzocannone', 8),
+(8,'Liceo Cavour', 'Corso Tassoni', 15),
+(4,'Liceo Minghetti', 'Via Bertoloni', 1);
 
 CREATE TABLE SediSportive(
     citta INT NOT NULL,
@@ -27,12 +38,7 @@ CREATE TABLE SediSportive(
     FOREIGN KEY (citta) REFERENCES Citta (id),
     PRIMARY KEY (citta,nome) 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-INSERT INTO SediSportive()
-VALUES(1,'consoli romani', 'fratelli argiulli',42),
-(1,'para bellum', 'gemelli angeli',30),
-(2,'Bolt', 'gurgietta deconcini',30),
-(3,'Simone Giannelli', 'giacomo Gialdini',26),
-(3,'libertas', 'garibaldi',11);
+
 CREATE TABLE Discipline(
     nome CHAR(30) NOT NULL PRIMARY KEY
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -50,13 +56,6 @@ CREATE TABLE GareSquadre(
     PRIMARY KEY (citta, SedeSportiva, ora, giorno)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO GareSquadre (citta, SedeSportiva, ora, giorno, disciplina, fase) VALUES
-(1,'consoli romani', '10:00:00', '2023-04-20', 'tennis', 'provinciale'),
-(1,'para bellum', '11:00:00', '2023-04-21', 'calcio', 'provinciale'),
-(2,'Bolt', '12:00:00', '2023-04-22', 'pallavolo', 'provinciale'),
-(3,'Simone Giannelli', '13:00:00', '2023-04-23', 'beach volley', 'provinciale'),
-(3,'libertas', '14:00:00', '2023-04-24', 'beach tennis', 'provinciale');
-
 CREATE TABLE GareSingole(
     citta INT NOT NULL,
     SedeSportiva CHAR(30) NOT NULL,
@@ -70,23 +69,26 @@ CREATE TABLE GareSingole(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE Atleti(
-    cod_tessera int NOT NULL PRIMARY KEY,
-    nome CHAR(20),
-    Cognome char(30),
-    eta int NOT NULL,
-    disciplina CHAR(30),
-    citta_fk INT NOT NULL,
-    istituto CHAR(30) NOT NULL,
-    FOREIGN KEY (citta_fk,istituto) REFERENCES Istituti(citta,nome),
-    FOREIGN KEY (disciplina) REFERENCES Discipline(nome)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE Gruppi (
     nome CHAR(30)NOT NULL PRIMARY KEY,
     disciplina CHAR(30) NOT NULL,
     eta_media INT NOT NULL,
     FOREIGN KEY (disciplina) REFERENCES Discipline(nome)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE Atleti(
+    cod_tessera int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nome CHAR(20),
+    Cognome char(30),
+    eta int NOT NULL,
+    disciplina CHAR(30),
+    citta_fk INT NOT NULL,
+    istituto CHAR(30) NOT NULL,
+    gruppo char(30),
+    FOREIGN KEY (citta_fk,istituto) REFERENCES Istituti(citta,nome),
+    FOREIGN KEY (disciplina) REFERENCES Discipline(nome),
+    FOREIGN KEY (gruppo) REFERENCES Gruppi(nome)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE CompetizioniSingole(
